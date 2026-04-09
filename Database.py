@@ -18,9 +18,9 @@ from datetime import datetime, timedelta
 
 def get_connection():
     return pymysql.connect(
-        host="192.168.XXX.XXX", # Ton adresse IP (Hotspot ou Wi-Fi)
+        host="192.168.1.134", # Votre IP Wi-Fi actuelle
         user="root",
-        password="",
+        password="", 
         database="conciergerie_desruelle",
         port=3306,
         connect_timeout=10

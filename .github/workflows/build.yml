@@ -1,0 +1,23 @@
+name: Build iOS IPA
+on: [push]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install Buildozer
+        run: |
+          pip install buildozer kivy-ios
+      - name: Build IPA
+        run: |
+          buildozer ios debug
+      - name: Upload IPA
+        uses: actions/upload-artifact@v3
+        with:
+          name: MonApp-iOS
+          path: bin/*.ipa

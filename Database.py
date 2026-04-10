@@ -15,6 +15,8 @@ def get_connection():
 ############################################################################
 import pymysql
 from datetime import datetime, timedelta
+import pymysql.cursors
+
 
 def get_connection():
     return pymysql.connect(
@@ -31,7 +33,7 @@ def get_connection():
 
 def get_categories():
     conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     cursor.execute("SELECT * FROM categorie")
     categories = cursor.fetchall()
     cursor.close()
@@ -40,7 +42,7 @@ def get_categories():
 
 def get_type_prestas_by_category(category_id):
     conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     cursor.execute("SELECT * FROM type_presta WHERE id_categorie = %s", (category_id,))
     type_prestas = cursor.fetchall()
     cursor.close()
@@ -49,7 +51,7 @@ def get_type_prestas_by_category(category_id):
 
 def get_type_presta_details(presta_id):
     conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     cursor.execute("SELECT * FROM type_presta WHERE id_type_presta = %s", (presta_id,))
     type_presta = cursor.fetchone()
     cursor.close()
@@ -90,7 +92,7 @@ def create_users(nom, prenom, email, mdp):
 
 def authenticate_users(email, mdp):
     conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     cursor.execute("SELECT * FROM user WHERE email = %s AND mdp = %s", (email, mdp))
     user = cursor.fetchone()
     cursor.close()
@@ -99,7 +101,7 @@ def authenticate_users(email, mdp):
 
 def get_users_details(user_id):
     conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     cursor.execute("SELECT * FROM user WHERE id_user = %s", (user_id,))
     user = cursor.fetchone()
     cursor.close()
@@ -136,7 +138,7 @@ def create_prestation(id_user, id_type_presta, debut, fin, adresse):
 
 def get_user_panier(user_id):
     conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     query = """
         SELECT tp.nom, tp.prix, p.id_presta 
         FROM prestation p
@@ -161,7 +163,7 @@ def valider_panier_db(user_id):
 
 def get_notifs(user_id):
     conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     cursor.execute("SELECT * FROM notif WHERE id_user = %s", (user_id,))
     notifs = cursor.fetchall()
     cursor.close()
@@ -178,7 +180,7 @@ def mark_notif_as_read(notif_id):
 
 def get_prestations_by_user(user_id):
     conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     cursor.execute("""
         SELECT p.*, GROUP_CONCAT(tp.nom_type_presta) AS types_presta
         FROM presta p
@@ -194,7 +196,7 @@ def get_prestations_by_user(user_id):
 
 def get_user_history(user_id):
     conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     cursor.execute("""
         SELECT p.id_presta, p.status, p.debut_contrat, p.prix_total, tp.nom 
         FROM prestation p
@@ -210,7 +212,7 @@ def get_user_history(user_id):
 
 def cancel_prestation(presta_id):
     conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     
     cursor.execute("SELECT debut_contrat FROM prestation WHERE id_presta = %s", (presta_id,))
     presta = cursor.fetchone()
@@ -261,7 +263,7 @@ def assign_technician_to_prestation(id_presta, id_tech):
 
 def get_unassigned_prestations():
     conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     cursor.execute("""
         SELECT p.*, u.nom as client_nom, u.prenom as client_prenom
         FROM prestation p
@@ -276,7 +278,7 @@ def get_unassigned_prestations():
 
 def get_all_technicians():
     conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     cursor.execute("""
         SELECT u.id_user, u.nom, u.prenom, u.email 
         FROM user u
@@ -314,7 +316,7 @@ def get_user_role(user_id):
 
     def get_last_5_techs():
         conn = get_connection()
-        cursor = conn.cursor(dictionary=True)
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute("""
             SELECT u.* FROM user u
             JOIN technicien t ON u.id_user = t.id_user
@@ -327,7 +329,7 @@ def get_user_role(user_id):
 
 def get_last_5_prestas_by_status(status):
     conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     cursor.execute("""
         SELECT p.*, u.nom as client_nom, u.prenom as client_prenom 
         FROM prestation p
@@ -342,7 +344,7 @@ def get_last_5_prestas_by_status(status):
 
 def get_tech_latest_prestas(tech_id):
     conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     cursor.execute("""
         SELECT p.id_presta, p.status, p.adresse 
         FROM prestation p
@@ -357,7 +359,7 @@ def get_tech_latest_prestas(tech_id):
 
 def get_presta_details(presta_id):
     conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     cursor.execute("""
         SELECT p.*, u.nom as client_nom, u.prenom as client_prenom 
         FROM prestation p
@@ -386,7 +388,7 @@ def add_technicien(nom, prenom, email, tel, mdp):
         conn.close()
 def get_last_5_techs():
     conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     cursor.execute("""
         SELECT u.* FROM user u
         JOIN technicien t ON u.id_user = t.id_user
@@ -399,7 +401,7 @@ def get_last_5_techs():
 
 def get_last_5_prestas_by_status(status):
     conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     cursor.execute("""
         SELECT p.*, u.nom as client_nom, u.prenom as client_prenom 
         FROM prestation p
@@ -414,7 +416,7 @@ def get_last_5_prestas_by_status(status):
 
 def get_tech_latest_prestas(tech_id):
     conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     cursor.execute("""
         SELECT p.id_presta, p.status, p.adresse 
         FROM prestation p
@@ -429,7 +431,7 @@ def get_tech_latest_prestas(tech_id):
 
 def get_presta_details(presta_id):
     conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     cursor.execute("""
         SELECT p.*, u.nom as client_nom, u.prenom as client_prenom 
         FROM prestation p

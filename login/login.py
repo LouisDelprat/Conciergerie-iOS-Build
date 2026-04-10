@@ -65,7 +65,8 @@ class ConciergerieApp(MDApp):
     def build(self):
         self.theme_cls.primary_palette = "Red"
         
-        sm = Builder.load_file("login.kv")
+        chemin_login = os.path.join(ROOT_DIR, 'login', 'login.kv')
+        sm = Builder.load_file(chemin_login)
         
         chemin_insc = os.path.join(ROOT_DIR, 'inscription', 'inscription.kv')
         sm.add_widget(Builder.load_file(chemin_insc))

@@ -4,6 +4,7 @@ title = Conciergerie
 package.name = conciergerieapp
 package.domain = org.louis
 version = 1.0
+icon.filename = icone_app.png
 
 # (OBLIGATOIRE) Sources et dépendances
 source.dir = .

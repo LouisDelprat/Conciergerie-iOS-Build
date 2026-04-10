@@ -1,14 +1,14 @@
 [app]
-title = Conciergerie App
-package.name = conciergerie
-package.domain = org.demo
+# (IMPORTANT) Le dossier source est le dossier actuel (.)
 source.dir = .
+
+# (IMPORTANT) Assure-toi que TOUS tes dossiers sont inclus
 source.include_exts = py,png,jpg,kv,atlas
-version = 1.0
-# On inclut PyMySQL pour la BDD
+source.include_patterns = images/*,utilisateur/*,login/*,recherche/*
+
+# (IMPORTANT) Vérifie la ligne requirements
 requirements = python3,kivy==2.3.0,kivymd==1.2.0,pymysql
 
-# iOS Specific
-ios.kivy_ios_url = https://github.com/kivy/kivy-ios
-ios.kivy_ios_branch = master
-target = ios
+# Le nom de ton package (ne doit pas contenir d'espaces)
+package.name = conciergerieapp
+package.domain = org.hackathon

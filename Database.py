@@ -20,7 +20,7 @@ import pymysql.cursors
 
 def get_connection():
     return pymysql.connect(
-        host="192.168.1.134", # Votre IP Wi-Fi actuelle
+        host="10.238.16.77", # Votre IP Wi-Fi actuelle
         user="root",
         password="", 
         database="conciergerie_desruelle",

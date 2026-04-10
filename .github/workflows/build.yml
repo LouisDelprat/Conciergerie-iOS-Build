@@ -12,7 +12,8 @@ jobs:
           python-version: '3.11'
       - name: Install dependencies
         run: |
-          pip install buildozer kivy-ios
+          # On ajoute 'cython' ici pour que GitHub l'installe
+          pip install buildozer kivy-ios cython
       - name: Build IPA
         run: |
           buildozer ios debug

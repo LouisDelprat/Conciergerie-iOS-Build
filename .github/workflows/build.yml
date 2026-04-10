@@ -18,24 +18,41 @@ jobs:
           
       - name: Install Python dependencies
         run: |
+          # On ajoute 'packaging' ici
           pip install buildozer kivy-ios cython packaging
           
-      - name: Build IPA (Xcode Project)
+      - name: Build IPA
         run: |
           buildozer ios debug
           
       - name: Force IPA Creation
         run: |
-          # Cette partie va chercher le dossier .app et le transformer en .ipa manuellement
-          mkdir -p Payload
-          # On cherche le dossier de l'app (il finit par .app)
-          APP_PATH=$(find .buildozer/ios/platform/kivy-ios/build -name "*.app" -type d | head -n 1)
-          cp -r "$APP_PATH" Payload/
-          zip -r MonApp.ipa Payload
-          mv MonApp.ipa bin/
+          echo "Recherche du dossier .app..."
+          # On cherche partout dans le dossier ios pour trouver le .app compilé
+          APP_FOLDER=$(find .buildozer/ios/platform -name "*.app" -type d | grep "release" || find .buildozer/ios/platform -name "*.app" -type d | head -n 1)
           
+          if [ -z "$APP_FOLDER" ]; then
+            echo "ERREUR : Dossier .app introuvable malgré le succès de l'archive."
+            exit 1
+          fi
+          
+          echo "Dossier trouvé : $APP_FOLDER"
+          
+          # Création de la structure IPA officielle
+          mkdir -p Payload
+          cp -r "$APP_FOLDER" Payload/
+          
+          # On compresse en .ipa
+          zip -r Conciergerie.ipa Payload
+          
+          # On le déplace dans bin pour l'artifact
+          mkdir -p bin
+          mv Conciergerie.ipa bin/
+          echo "Fichier IPA créé avec succès dans bin/"
+
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
           name: MonApp-iOS
-          path: bin/MonApp.ipa
+          path: bin/Conciergerie.ipa
+          if-no-files-found: error

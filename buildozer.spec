@@ -1,33 +1,27 @@
 [app]
-# (MANDATAIRE) Le nom de ton application
+# (OBLIGATOIRE) Les infos de base
 title = Conciergerie
-
-# (MANDATAIRE) Le nom du package (sans espaces)
 package.name = conciergerieapp
-
-# (MANDATAIRE) Le domaine (ex: org.test)
 package.domain = org.louis
-
-# (MANDATAIRE) Le dossier source (.)
-source.dir = .
-
-# (MANDATAIRE) Les extensions de fichiers à inclure
-source.include_exts = py,png,jpg,kv,atlas
-
-# (MANDATAIRE) La version de ton app (l'erreur venait d'ici !)
 version = 1.0
 
-# Tes dépendances (Kivy, KivyMD et PyMySQL pour la BDD)
+# (OBLIGATOIRE) Sources et dépendances
+source.dir = .
+source.include_exts = py,png,jpg,kv,atlas
 requirements = python3,kivy==2.3.0,kivymd==1.2.0,pymysql
 
-# Orientation de l'écran pour iPhone
-orientation = portrait
-
-# --- Paramètres iOS ---
+# --- PARAMÈTRES iOS (C'est ici que l'erreur se trouvait) ---
 ios.kivy_ios_url = https://github.com/kivy/kivy-ios
 ios.kivy_ios_branch = master
 ios.ios_deploy_url = https://github.com/ios-control/ios-deploy
 ios.ios_deploy_branch = master
+
+# AJOUTE CETTE LIGNE POUR CORRIGER LE CRASH
+ios.codesign.allowed = 0
+
+# Paramètres d'affichage
+orientation = portrait
+fullscreen = 1
 
 [buildozer]
 log_level = 2
